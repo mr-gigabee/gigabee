@@ -47,6 +47,10 @@ gigabee/
 │   ├── api-client-react/ # Generated React Query hooks + Zod schemas
 │   ├── api-zod/          # Generated Zod request/response schemas
 │   └── integrations/     # Shared integration helpers
+├── packages/
+│   ├── gigabee-sdk/      # JS/TS SDK for the Gigabee API
+│   └── gigabee-cli/      # CLI tool for worker management
+├── worker/               # Standalone worker release (gigabee-worker.mjs)
 ├── scripts/              # Utility scripts (@workspace/scripts)
 ├── pnpm-workspace.yaml   # Workspace catalog, overrides
 ├── tsconfig.base.json    # Shared strict TS defaults
@@ -205,7 +209,7 @@ Gigabee does not pre-screen or store generated images. Violations discovered thr
 
 ### Live now
 - Bee Hover & Glide chat (Llama 3.3 70B, token streaming)
-- Phantom & Solflare wallet login (no password, no email)
+- Magic-link email login (passwordless, no OAuth required)
 - Credits system — 10 free on signup, USDC top-up on Solana mainnet
 - Native GPU worker (Node.js + Ollama)
 - Honey earnings tracked per job (24 h integrity hold)
