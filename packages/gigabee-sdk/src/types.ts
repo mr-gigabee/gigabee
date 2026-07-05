@@ -26,24 +26,22 @@ export interface ChatOptions {
 }
 
 export interface ChatResponse {
-  jobId: string;
+  id: string;
   content: string;
-  promptTokens: number;
-  completionTokens: number;
-  creditsCharged: number;
-  workerAlias: string | null;
+  tokensUsed: number;
+  creditsDeducted: number;
+  workerId: string;
   model: string;
-  durationMs: number;
 }
 
 export interface ChatJob {
   id: string;
   model: string;
+  tier: string;
   status: string;
-  promptTokens: number | null;
-  completionTokens: number | null;
-  creditsCharged: number | null;
-  workerAlias: string | null;
+  tokensUsed: number;
+  creditsSpent: number;
+  workerId: string | null;
   createdAt: string;
 }
 
