@@ -71,7 +71,7 @@ export async function runChat(opts: { model?: string } = {}): Promise<void> {
         console.log();
         console.log(
           chalk.dim(
-            `\n        ${res.promptTokens + res.completionTokens} tokens  ·  ${res.creditsCharged} credits  ·  ${res.durationMs}ms`,
+            `\n        ${res.tokensUsed} tokens  ·  ${res.creditsDeducted} credits`,
           ),
         );
         console.log();
