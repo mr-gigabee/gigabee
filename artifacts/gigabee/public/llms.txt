@@ -1,0 +1,87 @@
+# Gigabee
+
+> Gigabee is a decentralized AI inference network. Users chat with Bee — an AI assistant powered by a global network of contributor GPUs. GPU owners earn Honey (paid in USDC on Solana) for serving inference jobs. The network is built on privacy by design: prompts are never stored.
+
+## About Gigabee
+
+Gigabee connects people who want to use AI with people who have spare GPU compute. Instead of relying on a single data center, every AI request is routed to a volunteer GPU worker anywhere in the world. Workers earn cryptocurrency (USDC on Solana) called Honey for every job they serve.
+
+- **Website**: https://gigabee.io
+- **X (Twitter)**: https://x.com/Gigabee_
+- **GitHub**: https://github.com/mr-gigabee
+- **Founded**: 2026
+
+## AI Models (Bee)
+
+Gigabee's AI assistant is called Bee. Three tiers are available:
+
+- **Bee Nano** (5 credits / $0.05 per message) — lightweight, fast responses
+- **Bee Hover** (10 credits / $0.10 per message) — general-purpose chat
+- **Bee Glide** (15 credits / $0.15 per message) — highest quality, complex reasoning
+- **Bee DAL** (20 credits / $0.20 per image) — AI image generation, 1024×1024 PNG
+
+Credits: 1 credit = $0.01 USD. New users receive 10 free credits on signup.
+
+## Key Features (Live)
+
+- Chat with Bee AI — streaming responses, conversation history stored in browser only
+- Image generation via Bee DAL — 20 credits per 1024×1024 PNG image
+- Browser GPU workers — earn Honey from your browser tab using WebGPU (no install)
+- Native GPU workers — run the Gigabee worker script with Ollama on any NVIDIA/AMD GPU
+- Honey earnings — workers earn 75% of the credit value per job (85% with staking, Phase 2)
+- USDC withdrawals — Honey paid to any Solana wallet on-chain
+- Referral program — earn 5% of referee credit purchases for 12 months
+- Public OpenAI-compatible API — POST /api/v1/chat/completions with SSE streaming
+- Privacy by design — no prompt storage, no message logging, no KYC
+
+## How Workers Earn
+
+1. Connect GPU via browser (WebGPU) or native script (Ollama + Node.js)
+2. When a user sends a chat message, the orchestrator assigns the job to an eligible worker
+3. Worker runs inference locally and streams tokens back
+4. Worker earns 75% of the credit value charged to the user
+5. Earnings mature after 24 hours and become withdrawable as USDC on Solana
+
+Example: a Bee Glide job (15 credits = $0.15) earns the worker $0.1125.
+
+## Pricing
+
+| Model     | Credits | USD     | Use case                        |
+|-----------|---------|---------|----------------------------------|
+| Bee Nano  | 5 cr    | $0.05   | Quick answers, lightweight tasks |
+| Bee Hover | 10 cr   | $0.10   | General chat, Q&A                |
+| Bee Glide | 15 cr   | $0.15   | Complex reasoning, long context  |
+| Bee DAL   | 20 cr   | $0.20   | AI image generation              |
+
+## Privacy
+
+- Prompts are never stored on Gigabee servers
+- Conversation history lives in the user's browser (localStorage only)
+- Job metadata is recorded (model used, timestamp, credits charged) but not message content
+- No KYC required for chat or worker registration
+- Authentication via Solana wallet (Phantom, Solflare) — no passwords, no email required
+
+## Technology
+
+- Frontend: React + Vite, Tailwind CSS, deployed at gigabee.io
+- Backend: Node.js + Express, Socket.io for real-time streaming
+- Database: PostgreSQL + Drizzle ORM
+- Auth: Solana wallet signatures, Bearer token sessions
+- Payments: USDC on Solana mainnet, on-chain verification
+- Worker protocol: Socket.io (/hive namespace), Ollama for native, WebGPU for browser
+
+## Pages
+
+- https://gigabee.io — Landing page, live network stats
+- https://gigabee.io/chat — Chat with Bee AI
+- https://gigabee.io/earn — Worker dashboard, earnings, withdrawals, referrals
+- https://gigabee.io/docs — Full technical documentation
+- https://gigabee.io/blog — Articles on decentralized AI, privacy, and GPU earning
+- https://gigabee.io/stats — Live network statistics (tokens generated, workers online, Honey paid)
+
+## Contact
+
+- General: https://gigabee.io
+- Security: security@gigabee.io
+- X: https://x.com/Gigabee_
+- GitHub: https://github.com/mr-gigabee

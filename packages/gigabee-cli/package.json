@@ -1,0 +1,30 @@
+{
+  "name": "gigabee-cli",
+  "version": "0.1.0",
+  "description": "CLI for the Gigabee decentralized AI network — ASCII dashboard, chat, and more",
+  "type": "commonjs",
+  "bin": {
+    "gigabee": "./dist/index.js"
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch"
+  },
+  "keywords": ["gigabee", "ai", "cli", "decentralized"],
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^12.1.0",
+    "inquirer": "^8.2.6",
+    "ora": "^5.4.1",
+    "gigabee-sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^8.2.10",
+    "@types/node": "^22.0.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  }
+}

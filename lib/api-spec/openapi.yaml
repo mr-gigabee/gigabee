@@ -1,0 +1,1013 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Gigabee decentralized AI inference network API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: stats
+    description: Public network statistics
+  - name: auth
+    description: Authentication operations
+  - name: credits
+    description: User credit balance and top-up
+  - name: chat
+    description: Chat and completions
+  - name: workers
+    description: Hive worker management
+  - name: earnings
+    description: Worker earnings and payouts
+  - name: referrals
+    description: Referral program
+  - name: api-keys
+    description: API key management
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /stats:
+    get:
+      operationId: getNetworkStats
+      tags: [stats]
+      summary: Get live network statistics
+      description: Public stats - workers online, jobs today, honey paid out
+      responses:
+        "200":
+          description: Network statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NetworkStats"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current authenticated user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/magic-link:
+    post:
+      operationId: requestMagicLink
+      tags: [auth]
+      summary: Request a magic link email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MagicLinkRequest"
+      responses:
+        "200":
+          description: Magic link sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MagicLinkResponse"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/verify:
+    post:
+      operationId: verifyMagicLink
+      tags: [auth]
+      summary: Verify magic link token and create session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MagicLinkVerify"
+      responses:
+        "200":
+          description: Authenticated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthSession"
+        "401":
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout and clear session
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /credits/balance:
+    get:
+      operationId: getCreditsBalance
+      tags: [credits]
+      summary: Get user credit balance
+      responses:
+        "200":
+          description: Credit balance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreditsBalance"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /credits/topup:
+    post:
+      operationId: initiateTopup
+      tags: [credits]
+      summary: Initiate a credit top-up via USDC deposit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TopupRequest"
+      responses:
+        "200":
+          description: Deposit address and instructions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TopupInfo"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /credits/transactions:
+    get:
+      operationId: getCreditTransactions
+      tags: [credits]
+      summary: Get credit transaction history
+      responses:
+        "200":
+          description: Transaction history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreditTransaction"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /chat/completions:
+    post:
+      operationId: createChatCompletion
+      tags: [chat]
+      summary: Create a chat completion (OpenAI-compatible)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatCompletionRequest"
+      responses:
+        "200":
+          description: Chat completion response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatCompletionResponse"
+        "402":
+          description: Insufficient credits
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /chat/jobs:
+    get:
+      operationId: listChatJobs
+      tags: [chat]
+      summary: Get recent chat job metadata (no content, only metadata)
+      responses:
+        "200":
+          description: Recent chat jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChatJob"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /workers/register:
+    post:
+      operationId: registerWorker
+      tags: [workers]
+      summary: Register a new worker node
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkerRegistration"
+      responses:
+        "201":
+          description: Worker registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Worker"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /workers/me:
+    get:
+      operationId: getMyWorker
+      tags: [workers]
+      summary: Get current user's worker status
+      responses:
+        "200":
+          description: Worker status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Worker"
+        "404":
+          description: No worker registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /workers/heartbeat:
+    post:
+      operationId: workerHeartbeat
+      tags: [workers]
+      summary: Send worker heartbeat to stay online
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HeartbeatData"
+      responses:
+        "200":
+          description: Heartbeat acknowledged
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /earnings/balance:
+    get:
+      operationId: getEarningsBalance
+      tags: [earnings]
+      summary: Get worker's Honey (earnings) balance
+      responses:
+        "200":
+          description: Earnings balance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EarningsBalance"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /earnings/summary:
+    get:
+      operationId: getEarningsSummary
+      tags: [earnings]
+      summary: Get worker earnings summary (totals, this month, all-time)
+      responses:
+        "200":
+          description: Earnings summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EarningsSummary"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /earnings/history:
+    get:
+      operationId: getEarningsHistory
+      tags: [earnings]
+      summary: Get paginated earnings history
+      responses:
+        "200":
+          description: Earnings entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EarningsEntry"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /earnings/withdraw:
+    post:
+      operationId: requestWithdrawal
+      tags: [earnings]
+      summary: Request a USDC withdrawal payout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WithdrawalRequest"
+      responses:
+        "200":
+          description: Withdrawal queued or under review
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WithdrawalResult"
+        "400":
+          description: Invalid request or insufficient balance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /earnings/payouts:
+    get:
+      operationId: getPayoutHistory
+      tags: [earnings]
+      summary: Get payout history
+      responses:
+        "200":
+          description: Payout history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Payout"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /referrals/code:
+    get:
+      operationId: getReferralCode
+      tags: [referrals]
+      summary: Get user's personal referral link/code
+      responses:
+        "200":
+          description: Referral code and link
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferralCode"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /referrals/stats:
+    get:
+      operationId: getReferralStats
+      tags: [referrals]
+      summary: Get referral program statistics
+      responses:
+        "200":
+          description: Referral stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferralStats"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api-keys:
+    get:
+      operationId: listApiKeys
+      tags: [auth]
+      summary: List active API keys
+      description: Returns all non-revoked API keys for the authenticated user (key prefix only, never the raw key).
+      responses:
+        "200":
+          description: List of API keys
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyList"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createApiKey
+      tags: [auth]
+      summary: Create a new API key
+      description: Generates a new API key. The raw key is returned once and cannot be retrieved again.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateApiKeyRequest"
+      responses:
+        "201":
+          description: API key created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyCreated"
+        "400":
+          description: Key limit reached
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api-keys/{id}:
+    delete:
+      operationId: revokeApiKey
+      tags: [auth]
+      summary: Revoke an API key
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Key revoked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+        "404":
+          description: Key not found or already revoked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+
+    OkResponse:
+      type: object
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+
+    NetworkStatsDayEntry:
+      type: object
+      required: [day, jobs, tokens]
+      properties:
+        day:
+          type: string
+        jobs:
+          type: integer
+        tokens:
+          type: integer
+
+    NetworkStatsModelEntry:
+      type: object
+      required: [model, jobs, tokens]
+      properties:
+        model:
+          type: string
+        jobs:
+          type: integer
+        tokens:
+          type: integer
+
+    NetworkStats:
+      type: object
+      required: [workersOnline, jobsToday, honeyPaidOutUsd, tokensGenerated, activeModels, daily, byModel]
+      properties:
+        workersOnline:
+          type: integer
+        jobsToday:
+          type: integer
+        honeyPaidOutUsd:
+          type: number
+        tokensGenerated:
+          type: integer
+        activeModels:
+          type: integer
+        daily:
+          type: array
+          items:
+            $ref: "#/components/schemas/NetworkStatsDayEntry"
+        byModel:
+          type: array
+          items:
+            $ref: "#/components/schemas/NetworkStatsModelEntry"
+
+    User:
+      type: object
+      required: [id, email, createdAt]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+
+    MagicLinkRequest:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+
+    MagicLinkResponse:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+
+    MagicLinkVerify:
+      type: object
+      required: [token]
+      properties:
+        token:
+          type: string
+
+    AuthSession:
+      type: object
+      required: [user, sessionToken]
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        sessionToken:
+          type: string
+
+    CreditsBalance:
+      type: object
+      required: [credits, usdValue]
+      properties:
+        credits:
+          type: integer
+        usdValue:
+          type: number
+
+    TopupRequest:
+      type: object
+      required: [amountUsd]
+      properties:
+        amountUsd:
+          type: number
+
+    TopupInfo:
+      type: object
+      required: [depositAddress, amountUsdc, expiresAt, memo]
+      properties:
+        depositAddress:
+          type: string
+        amountUsdc:
+          type: number
+        expiresAt:
+          type: string
+        memo:
+          type: string
+
+    CreditTransaction:
+      type: object
+      required: [id, type, credits, description, createdAt]
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [topup, debit, refund]
+        credits:
+          type: integer
+        description:
+          type: string
+        createdAt:
+          type: string
+
+    ChatCompletionRequest:
+      type: object
+      required: [model, messages]
+      properties:
+        model:
+          type: string
+          enum: [bee-nano, bee-hover, bee-glide]
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatMessage"
+        stream:
+          type: boolean
+
+    ChatMessage:
+      type: object
+      required: [role, content]
+      properties:
+        role:
+          type: string
+          enum: [user, assistant, system]
+        content:
+          type: string
+
+    ChatCompletionResponse:
+      type: object
+      required: [id, model, content, creditsDeducted, workerId, tokensUsed]
+      properties:
+        id:
+          type: string
+        model:
+          type: string
+        content:
+          type: string
+        creditsDeducted:
+          type: integer
+        workerId:
+          type: string
+        tokensUsed:
+          type: integer
+
+    ChatJob:
+      type: object
+      required: [id, model, tier, creditsSpent, tokensUsed, status, createdAt]
+      properties:
+        id:
+          type: string
+        model:
+          type: string
+        tier:
+          type: string
+        creditsSpent:
+          type: integer
+        tokensUsed:
+          type: integer
+        status:
+          type: string
+          enum: [completed, failed, refunded]
+        workerId:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    WorkerRegistration:
+      type: object
+      required: [type, capabilities]
+      properties:
+        type:
+          type: string
+          enum: [browser, native]
+        capabilities:
+          $ref: "#/components/schemas/WorkerCapabilities"
+
+    WorkerCapabilities:
+      type: object
+      required: [model, tokensPerSecond]
+      properties:
+        model:
+          type: string
+        tokensPerSecond:
+          type: number
+        vramMb:
+          type: ["integer", "null"]
+        gpuName:
+          type: ["string", "null"]
+
+    Worker:
+      type: object
+      required: [id, type, status, reputationScore, totalJobsServed, totalTokensGenerated, createdAt]
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [browser, native]
+        status:
+          type: string
+          enum: [idle, serving, offline]
+        reputationScore:
+          type: number
+        totalJobsServed:
+          type: integer
+        totalTokensGenerated:
+          type: integer
+        capabilities:
+          $ref: "#/components/schemas/WorkerCapabilities"
+        createdAt:
+          type: string
+        lastSeen:
+          type: ["string", "null"]
+
+    HeartbeatData:
+      type: object
+      required: [workerId, status]
+      properties:
+        workerId:
+          type: string
+        status:
+          type: string
+          enum: [idle, serving]
+
+    EarningsBalance:
+      type: object
+      required: [honeyUsd, pendingUsd, lifetimeUsd]
+      properties:
+        honeyUsd:
+          type: number
+        pendingUsd:
+          type: number
+        lifetimeUsd:
+          type: number
+
+    EarningsSummary:
+      type: object
+      required: [balanceUsd, thisMonthUsd, allTimeUsd, jobsThisMonth, jobsAllTime, avgTokensPerSecond]
+      properties:
+        balanceUsd:
+          type: number
+        thisMonthUsd:
+          type: number
+        allTimeUsd:
+          type: number
+        jobsThisMonth:
+          type: integer
+        jobsAllTime:
+          type: integer
+        avgTokensPerSecond:
+          type: number
+
+    EarningsEntry:
+      type: object
+      required: [id, jobId, amountUsd, tokensServed, model, createdAt]
+      properties:
+        id:
+          type: string
+        jobId:
+          type: string
+        amountUsd:
+          type: number
+        tokensServed:
+          type: integer
+        model:
+          type: string
+        createdAt:
+          type: string
+
+    WithdrawalRequest:
+      type: object
+      required: [amountUsd, walletAddress]
+      properties:
+        amountUsd:
+          type: number
+        walletAddress:
+          type: string
+
+    WithdrawalResult:
+      type: object
+      required: [id, status, amountUsd, estimatedArrival]
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [queued, review, processing, completed]
+        amountUsd:
+          type: number
+        estimatedArrival:
+          type: string
+        txHash:
+          type: ["string", "null"]
+
+    Payout:
+      type: object
+      required: [id, amountUsd, status, walletAddress, createdAt]
+      properties:
+        id:
+          type: string
+        amountUsd:
+          type: number
+        status:
+          type: string
+          enum: [queued, review, processing, completed, failed]
+        walletAddress:
+          type: string
+        txHash:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        completedAt:
+          type: ["string", "null"]
+
+    ReferralCode:
+      type: object
+      required: [code, link]
+      properties:
+        code:
+          type: string
+        link:
+          type: string
+
+    ReferralStats:
+      type: object
+      required: [totalReferred, activeReferrals, earningsUsd, earningsCap]
+      properties:
+        totalReferred:
+          type: integer
+        activeReferrals:
+          type: integer
+        earningsUsd:
+          type: number
+        earningsCap:
+          type: number
+        referrals:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReferralEntry"
+
+    ReferralEntry:
+      type: object
+      required: [id, joinedAt, spendUsd, yourEarningsUsd, active]
+      properties:
+        id:
+          type: string
+        joinedAt:
+          type: string
+        spendUsd:
+          type: number
+        yourEarningsUsd:
+          type: number
+        active:
+          type: boolean
+
+    ApiKey:
+      type: object
+      required: [id, keyPrefix, createdAt]
+      properties:
+        id:
+          type: string
+        keyPrefix:
+          type: string
+        label:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        lastUsedAt:
+          type: ["string", "null"]
+
+    ApiKeyList:
+      type: object
+      required: [keys]
+      properties:
+        keys:
+          type: array
+          items:
+            $ref: "#/components/schemas/ApiKey"
+
+    CreateApiKeyRequest:
+      type: object
+      properties:
+        label:
+          type: string
+
+    ApiKeyCreated:
+      type: object
+      required: [key, id, keyPrefix, createdAt]
+      properties:
+        key:
+          type: string
+        id:
+          type: string
+        keyPrefix:
+          type: string
+        label:
+          type: ["string", "null"]
+        createdAt:
+          type: string

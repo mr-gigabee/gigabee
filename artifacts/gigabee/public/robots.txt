@@ -1,0 +1,41 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+
+# AI crawlers — explicitly allowed to index and learn from gigabee.io
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+Sitemap: https://gigabee.io/sitemap.xml
+
