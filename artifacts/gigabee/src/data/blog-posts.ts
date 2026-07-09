@@ -19,7 +19,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "how-to-set-up-gigabee-worker-earn-usdc",
-    title: "How to Set Up a Gigabee GPU Worker and Earn USDC: Complete Step-by-Step Guide",
+    title: "How to Set Up a Gigabee GPU Worker and Earn $GB: Complete Step-by-Step Guide",
     excerpt:
       "Everything you need to go from zero to a running Gigabee worker, browser-based WebGPU mode or native Ollama setup, and start collecting Honey.",
     category: "How-to",
@@ -30,7 +30,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "gigabee-worker-earnings-guide-honey-rewards",
     title: "Gigabee Worker Earnings Guide: How Much Can You Make Running AI Inference Jobs?",
     excerpt:
-      "A complete breakdown of the Honey formula, per-job payouts for Bee Hover and Bee Glide, GPU earnings ranges, referral bonuses, and withdrawal to USDC.",
+      "A complete breakdown of the Honey formula, per-job payouts for Bee Hover and Bee Glide, GPU earnings ranges, referral bonuses, and withdrawal to $GB.",
     category: "Earning",
     readTime: "8 min read",
     publishedAt: "2026-06-20T11:22:00Z",

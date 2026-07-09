@@ -145,7 +145,7 @@ const CONTENT: Record<string, React.ReactNode> = {
         items={[
           "Model availability, the worker must have the requested model loaded.",
           "Current load, workers already serving a job are deprioritised to reduce queuing latency.",
-          "Stake (Phase 2), workers who have staked USDC earn a higher revenue share and are preferred for job assignment, creating a quality incentive.",
+          "Stake (Phase 2), workers who have staked $GB earn a higher revenue share and are preferred for job assignment, creating a quality incentive.",
           "Geographic proximity, lower round-trip latency means faster first-token time for the user.",
         ]}
       />
@@ -163,16 +163,16 @@ const CONTENT: Record<string, React.ReactNode> = {
 
       <H2>The Solana payment rail</H2>
       <P>
-        All money flows in Gigabee settle on Solana mainnet using USDC (the USD-pegged stablecoin issued by Circle). There are two flows:
+        All money flows in Gigabee settle on Solana mainnet using $GB (CA: 7NcMKMrXPBVCWPcs9SSqnF6ZGy5neAtzTZpFqZqLquaP). There are two flows:
       </P>
       <Ul
         items={[
-          "Deposits: Users send USDC to the Gigabee treasury wallet. The frontend builds a transferChecked SPL token transaction, the user approves it in Phantom or Solflare, and the backend verifies the on-chain transaction before crediting the account.",
-          "Withdrawals: Workers accumulate Honey earnings in an internal ledger. When they request a payout, the treasury signs and broadcasts a USDC transfer to the worker's wallet. The transaction hash is recorded and linked from the earnings dashboard.",
+          "Deposits: Users send $GB to the Gigabee treasury wallet. The frontend builds a transferChecked SPL token transaction, the user approves it in Phantom or Solflare, and the backend verifies the on-chain transaction before crediting the account.",
+          "Withdrawals: Workers accumulate Honey earnings in an internal ledger. When they request a payout, the treasury signs and broadcasts a $GB transfer to the worker's wallet. The transaction hash is recorded and linked from the earnings dashboard.",
         ]}
       />
       <P>
-        Because every payment is a standard on-chain USDC transfer, both users and workers can independently verify all flows on Solscan, there is no closed ledger to trust.
+        Because every payment is a standard on-chain $GB transfer, both users and workers can independently verify all flows on Solscan, there is no closed ledger to trust.
       </P>
 
       <H2>No central GPU dependency</H2>
@@ -186,7 +186,7 @@ const CONTENT: Record<string, React.ReactNode> = {
       <H2>What comes next</H2>
       <Ul
         items={[
-          "Worker staking (Phase 2): Workers lock USDC to earn an 85% revenue share (up from 75%) and gain priority in job assignment.",
+          "Worker staking (Phase 2): Workers lock $GB to earn an 85% revenue share (up from 75%) and gain priority in job assignment.",
           "Image generation: Open-source diffusion models served by verified GPU workers, with age verification enforced at job dispatch.",
           "Worker reputation: On-chain reputation scoring based on job completion rate, latency, and evaluator ratings.",
           "Additional model tiers: Larger, more capable models for specialised tasks, with dynamic pricing based on compute cost.",
@@ -199,7 +199,7 @@ const CONTENT: Record<string, React.ReactNode> = {
   "how-to-set-up-gigabee-worker-earn-usdc": (
     <>
       <P>
-        Running a Gigabee worker lets you earn USDC by serving AI inference jobs to users around the world. Your GPU does the work; the Gigabee network handles routing, billing, and payment. This guide covers both worker types, browser-based (WebGPU) and native (Ollama), from first login to first payout.
+        Running a Gigabee worker lets you earn $GB by serving AI inference jobs to users around the world. Your GPU does the work; the Gigabee network handles routing, billing, and payment. This guide covers both worker types, browser-based (WebGPU) and native (Ollama), from first login to first payout.
       </P>
       <Note>
         You do not need to buy credits or pay anything to become a worker. You only need a Solana wallet and a capable GPU.
@@ -273,7 +273,7 @@ const CONTENT: Record<string, React.ReactNode> = {
       </P>
       <Ul
         items={[
-          "Total Honey earned (in USDC equivalent)",
+          "Total Honey earned (in $GB equivalent)",
           "Jobs completed today and this week",
           "Current worker status (Active / Idle / Offline)",
           "Pending payout balance and hold-until date",
@@ -283,7 +283,7 @@ const CONTENT: Record<string, React.ReactNode> = {
         Earnings are credited to your internal ledger after each confirmed job. The ledger updates in real time while your worker is active.
       </P>
 
-      <H2>Step 4: Withdraw your USDC</H2>
+      <H2>Step 4: Withdraw your $GB</H2>
       <P>
         When your balance reaches the minimum payout threshold, you can request a withdrawal.
       </P>
@@ -291,15 +291,15 @@ const CONTENT: Record<string, React.ReactNode> = {
         items={[
           "Go to gigabee.io/earn and click Request Withdrawal.",
           "Enter your Solana wallet address (the one you signed in with, or any wallet you control).",
-          "The payout is queued for admin review and sent to your wallet via an on-chain USDC transfer.",
+          "The payout is queued for admin review and sent to your wallet via an on-chain $GB transfer.",
           "Once sent, a Solscan link appears in your payout history so you can verify the transaction independently.",
         ]}
       />
       <Table
         headers={["Payout detail", "Value"]}
         rows={[
-          ["Minimum withdrawal", "10 credits ($0.10)"],
-          ["Payment token", "USDC on Solana mainnet"],
+          ["Minimum withdrawal", "$25.00 in $GB"],
+          ["Payment token", "$GB on Solana mainnet"],
           ["Processing time", "Typically within 24 hours"],
           ["Verification", "On-chain, visible on Solscan"],
         ]}
@@ -337,7 +337,7 @@ const CONTENT: Record<string, React.ReactNode> = {
         earnings = credits × $0.01 × revenue_share
       </div>
       <P>
-        Revenue share is 75% at standard rate. Workers who stake USDC (Phase 2, coming soon) earn 85%.
+        Revenue share is 75% at standard rate. Workers who stake $GB (Phase 2, coming soon) earn 85%.
       </P>
       <Table
         headers={["Model", "User cost", "Your earnings (75%)", "Your earnings (85% staked)"]}
@@ -389,7 +389,7 @@ const CONTENT: Record<string, React.ReactNode> = {
 
       <H2>Staking for higher revenue share</H2>
       <P>
-        In Phase 2, workers will be able to stake USDC to signal commitment to the network. Staked workers receive 85% revenue share (vs 75%) and are prioritised in job assignment, meaning more jobs per hour on top of more earnings per job. The two effects compound significantly at scale.
+        In Phase 2, workers will be able to stake $GB to signal commitment to the network. Staked workers receive 85% revenue share (vs 75%) and are prioritised in job assignment, meaning more jobs per hour on top of more earnings per job. The two effects compound significantly at scale.
       </P>
       <Table
         headers={["Mode", "Revenue share", "Job priority", "RTX 4070 monthly (Bee Hover)"]}
@@ -401,10 +401,10 @@ const CONTENT: Record<string, React.ReactNode> = {
 
       <H2>Withdrawal and taxes</H2>
       <P>
-        Earnings are paid in USDC on Solana mainnet. Because USDC is pegged to the US dollar, you receive approximately the dollar value shown in your dashboard, no conversion needed. Each payout is a publicly verifiable on-chain transaction.
+        Earnings are paid in $GB on Solana mainnet. Each payout is a publicly verifiable on-chain transaction. The $GB value in USD terms depends on the live market price.
       </P>
       <P>
-        Tax treatment of cryptocurrency earnings varies by country. In most jurisdictions, USDC received as income from services rendered is treated as ordinary income at the time of receipt. Consult a tax professional for advice specific to your situation.
+        Tax treatment of cryptocurrency earnings varies by country. In most jurisdictions, token income received from services rendered is treated as ordinary income at the time of receipt. Consult a tax professional for advice specific to your situation.
       </P>
     </>
   ),
@@ -440,7 +440,7 @@ const CONTENT: Record<string, React.ReactNode> = {
           "Your wallet public key, this is your account identifier.",
           "Credit balance and transaction history, required to operate the billing system.",
           "Job metadata, timestamp, model used, credits deducted, worker ID. No content.",
-          "Deposit records, the on-chain USDC transaction hash that funded your account.",
+          "Deposit records, the on-chain $GB transaction hash that funded your account.",
           "Earnings records for workers, job IDs, credit amounts, payout status.",
           "Referral relationships, which wallet referred which, and aggregate spend for commission calculation.",
         ]}
@@ -471,7 +471,7 @@ const CONTENT: Record<string, React.ReactNode> = {
 
       <H2>Open payment ledger</H2>
       <P>
-        All USDC payments, both deposits from users and payouts to workers, are standard SPL token transfers on Solana mainnet. Every transaction is publicly visible on Solscan. This openness is intentional: it means Gigabee cannot secretly redirect funds, inflate earnings, or manipulate the payment rail without it being detectable on-chain.
+        All $GB payments, both deposits from users and payouts to workers, are standard SPL token transfers on Solana mainnet. Every transaction is publicly visible on Solscan. This openness is intentional: it means Gigabee cannot secretly redirect funds, inflate earnings, or manipulate the payment rail without it being detectable on-chain.
       </P>
 
       <H2>Is Gigabee private enough for sensitive use?</H2>
@@ -495,7 +495,7 @@ const CONTENT: Record<string, React.ReactNode> = {
           ["User real identity", "No", "Wallet public key only"],
           ["Credit balance", "Yes", "Internal database"],
           ["Job metadata (no content)", "Yes", "Internal database"],
-          ["USDC payment records", "Yes", "Internal DB + Solana blockchain"],
+          ["$GB payment records", "Yes", "Internal DB + Solana blockchain"],
         ]}
       />
     </>
@@ -581,7 +581,7 @@ const CONTENT: Record<string, React.ReactNode> = {
         the earnings ledger for rows where <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded">status = 'pending'</code> and <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded">availableAt ≤ NOW()</code>,
         then bulk-updates them to <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded">available</code>.
         Your withdrawal balance on the earn page now reflects earnings that have passed the 24-hour
-        hold, and the Withdraw button becomes active once the minimum threshold ($1.00) is reached.
+        hold, and the Withdraw button becomes active once the minimum threshold ($25.00 in $GB) is reached.
       </P>
 
       <H2>How to update your worker script</H2>

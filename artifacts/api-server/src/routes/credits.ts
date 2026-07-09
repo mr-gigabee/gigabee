@@ -7,7 +7,7 @@ import {
 } from "@workspace/api-zod";
 import { requireAuth, type AuthedRequest } from "../lib/auth";
 import { ensureBalance } from "../lib/billing";
-import { verifyUsdcPayment, CREDIT_PACKAGES } from "../lib/solana/verify";
+import { verifyGbPayment, getGbPrice, CREDIT_PACKAGES } from "../lib/solana/verify";
 
 const router: IRouter = Router();
 
@@ -27,18 +27,32 @@ router.get("/credits/balance", requireAuth, async (req, res): Promise<void> => {
   );
 });
 
-// GET /credits/packages
-router.get("/credits/packages", (_req, res): void => {
-  const packages = Object.entries(CREDIT_PACKAGES).map(([id, pkg]) => ({
-    id,
-    label: pkg.label,
-    usdcAmount: pkg.usdcAmount,
-    credits: pkg.credits,
-    bonus: pkg.credits - pkg.usdcAmount * 100,
-    pricePerCredit: (pkg.usdcAmount / pkg.credits).toFixed(4),
-  }));
+// GET /credits/packages  — returns packages with live $GB amounts
+router.get("/credits/packages", async (_req, res): Promise<void> => {
+  let gbPrice: number | null = null;
+  try {
+    gbPrice = await getGbPrice();
+  } catch {
+    // continue with gbPrice = null — frontend will handle gracefully
+  }
+
+  const packages = Object.entries(CREDIT_PACKAGES).map(([id, pkg]) => {
+    const gbAmount = gbPrice ? Math.ceil(pkg.usdAmount / gbPrice) : null;
+    const bonus = pkg.credits - pkg.usdAmount * 100; // credits above 1:1
+    return {
+      id,
+      label:         pkg.label,
+      usdAmount:     pkg.usdAmount,
+      gbAmount,
+      credits:       pkg.credits,
+      bonus:         bonus > 0 ? bonus : 0,
+      pricePerCredit: (pkg.usdAmount / pkg.credits).toFixed(4),
+    };
+  });
+
   res.json({
     packages,
+    gbPrice,
     treasuryWallet: process.env["TREASURY_WALLET"] ?? "4ojZUbahagMhCsnPgVqNmHWydfL5u97LYHG3ZjfZDouy",
   });
 });
@@ -99,8 +113,8 @@ router.post("/credits/verify-tx", requireAuth, async (req, res): Promise<void> =
     return;
   }
 
-  // ── 3. On-chain verification ─────────────────────────────────────────────
-  const result = await verifyUsdcPayment({ txSignature: sig, expectedUsdcAmount: pkg.usdcAmount });
+  // ── 3. On-chain verification (live price, ±5% tolerance) ─────────────────
+  const result = await verifyGbPayment({ txSignature: sig, expectedUsdAmount: pkg.usdAmount });
   if (!result.ok) {
     res.status(422).json({ error: result.reason });
     return;
@@ -122,12 +136,13 @@ router.post("/credits/verify-tx", requireAuth, async (req, res): Promise<void> =
   if (result.sender.toLowerCase() !== user.solanaAddress.toLowerCase()) {
     req.log.warn({ userId: user.id, sender: result.sender, wallet: user.solanaAddress }, "TX sender mismatch");
     res.status(403).json({
-      error: "Transaction was not sent from your connected wallet. Send USDC from the same wallet you used to log in.",
+      error: "Transaction was not sent from your connected wallet. Send $GB from the same wallet you used to log in.",
     });
     return;
   }
 
   // ── 6. Credit atomically ─────────────────────────────────────────────────
+  const gbMicro = Math.round(result.actualGbAmount * 1_000_000);
   await db.transaction(async (tx) => {
     const [deposit] = await tx
       .insert(depositsTable)
@@ -136,7 +151,7 @@ router.post("/credits/verify-tx", requireAuth, async (req, res): Promise<void> =
         chain: "solana",
         address: result.sender,
         txHash: sig,
-        usdcMicro: pkg.usdcAmount * 1_000_000,
+        usdcMicro: gbMicro,
         creditsGranted: pkg.credits,
         status: "confirmed",
         confirmedAt: new Date(),
@@ -156,7 +171,7 @@ router.post("/credits/verify-tx", requireAuth, async (req, res): Promise<void> =
     });
   });
 
-  req.log.info({ userId: user.id, sig, packageId, credits: pkg.credits }, "Credits granted");
+  req.log.info({ userId: user.id, sig, packageId, credits: pkg.credits, gbAmount: result.actualGbAmount }, "Credits granted");
 
   // ── 7. Referral commission (5 %, capped $100) ────────────────────────────
   try {
@@ -167,8 +182,9 @@ router.post("/credits/verify-tx", requireAuth, async (req, res): Promise<void> =
       .where(and(eq(referralsTable.refereeId, user.id), gt(referralsTable.expiresAt, new Date())));
 
     if (referral) {
+      const usdMicro = Math.round(pkg.usdAmount * 1_000_000);
       const commission = Math.min(
-        Math.floor(pkg.usdcAmount * 1_000_000 * 0.05),
+        Math.floor(usdMicro * 0.05),
         CAP_MICRO - referral.earnedUsdMicro,
       );
       if (commission > 0) {

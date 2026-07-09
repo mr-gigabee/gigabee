@@ -153,7 +153,7 @@ export default function StatsPage() {
               value={honey >= 1000
                 ? `$${(honey / 1000).toFixed(2)}k`
                 : `$${honey.toFixed(2)}`}
-              sub="total USDC paid to workers"
+              sub="total $GB paid to workers"
               active={honey > 0}
             />
             <LiveCard

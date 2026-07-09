@@ -683,7 +683,7 @@ export default function Home() {
               <div>
                 <h3 className="font-serif text-lg font-medium text-foreground mb-1">Get paid for your compute</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Earn Honey in USDC for every job your GPU serves, plus for evaluating, creating, and referring.
+                  Earn Honey in $GB for every job your GPU serves, plus for evaluating, creating, and referring.
                 </p>
               </div>
               <IllustrationBars />
@@ -711,7 +711,7 @@ export default function Home() {
                 {
                   num: "01",
                   title: "Usage funds the pool",
-                  body: "Every paid message and API call flows into one revenue pool, in USDC.",
+                  body: "Every paid message and API call flows into one revenue pool, in $GB.",
                 },
                 {
                   num: "02",
@@ -721,7 +721,7 @@ export default function Home() {
                 {
                   num: "03",
                   title: "Withdraw anytime",
-                  body: "Honey pays out in USDC. Earnings are tracked on-chain. Payouts launching soon.",
+                  body: "Honey pays out in $GB. Earnings are tracked on-chain. Payouts launching soon.",
                 },
               ].map(({ num, title, body }, i) => (
                 <FadeUpCard

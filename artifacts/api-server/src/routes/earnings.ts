@@ -127,6 +127,12 @@ router.post("/earnings/withdraw", requireAuth, async (req, res): Promise<void> =
   const { amountUsd, walletAddress } = parsed.data;
   const requestedMicro = Math.round(amountUsd * 1_000_000);
 
+  const MIN_WITHDRAWAL_MICRO = 25_000_000; // $25.00
+  if (requestedMicro < MIN_WITHDRAWAL_MICRO) {
+    res.status(400).json({ error: "Minimum withdrawal is $25.00 in $GB" });
+    return;
+  }
+
   // Sum available earnings
   const [availResult] = await db
     .select({ total: sql<number>`coalesce(sum(usd_micro), 0)` })

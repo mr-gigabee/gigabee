@@ -84,7 +84,7 @@ const sections: Section[] = [
           Gigabee is a decentralized AI inference network. When you send a message, it doesn't go to a
           corporate data center. It goes to the Hive: a global network of GPUs contributed by people
           like you. The worker runs the model, streams the answer back word by word, and earns Honey
-          (real USDC) for the work.
+          (real $GB) for the work.
         </P>
         <p className="text-sm font-medium text-foreground mb-6 italic">
           AI powered by the hive, not the data center.
@@ -183,7 +183,7 @@ const sections: Section[] = [
         <P>
           Browser workers run entirely inside your Chrome or Edge tab using WebGPU — no install required.
           Open the <strong>Earn → Browser Worker</strong> tab, click <strong>Start Worker</strong>, and keep the tab open.
-          Your GPU serves inference jobs and earns Honey (USDC) the same way native workers do.
+          Your GPU serves inference jobs and earns Honey ($GB) the same way native workers do.
         </P>
         <Callout title="Live — no install needed">
           WebGPU browser workers are live. Go to <a href="/earn" className="text-primary underline underline-offset-2">/earn → Browser Worker</a> to start earning from your browser today.
@@ -285,7 +285,7 @@ const sections: Section[] = [
       <>
         <P>
           Everything is paid with credits. <strong className="text-foreground">1 credit = $0.01</strong>,
-          purchased with USDC (card top-ups are coming). No subscription, no token required, no expiry.
+          purchased with $GB on Solana. No subscription, no expiry.
         </P>
         <div className="border border-border rounded-xl overflow-x-auto my-4">
           <table className="w-full min-w-[560px] text-sm">
@@ -322,8 +322,7 @@ const sections: Section[] = [
 
         <H2>Top up</H2>
         <P>
-          Top up from the credits panel in your chat sidebar. Select a package, approve the USDC
-          transfer in your Phantom or Solflare wallet, and credits appear in your balance after the
+          Top up from the credits panel in your chat sidebar. Select a package, send $GB to the treasury address in your Phantom or Solflare wallet, and credits appear in your balance after the
           transaction confirms on-chain (usually under 30 seconds). Packages:
         </P>
         <div className="border border-border rounded-xl overflow-x-auto my-4">
@@ -331,17 +330,17 @@ const sections: Section[] = [
             <thead className="bg-secondary/50 border-b border-border">
               <tr>
                 <th className="px-4 py-3 text-left font-medium text-foreground">Package</th>
-                <th className="px-4 py-3 text-right font-medium text-foreground">USDC</th>
+                <th className="px-4 py-3 text-right font-medium text-foreground">$GB</th>
                 <th className="px-4 py-3 text-right font-medium text-foreground">Credits</th>
                 <th className="px-4 py-3 text-right font-medium text-foreground">Hover messages</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { pkg: "Starter",  usdc: "$5",  credits: "500",   msgs: "50" },
-                { pkg: "Standard", usdc: "$10", credits: "1,100", msgs: "110", bonus: "+100" },
-                { pkg: "Pro",      usdc: "$25", credits: "2,750", msgs: "275", bonus: "+250" },
-                { pkg: "Power",    usdc: "$50", credits: "6,000", msgs: "600", bonus: "+1,000" },
+                { pkg: "Starter",  usdc: "5 $GB",  credits: "500",   msgs: "50" },
+                { pkg: "Standard", usdc: "10 $GB", credits: "1,100", msgs: "110", bonus: "+100" },
+                { pkg: "Pro",      usdc: "25 $GB", credits: "2,750", msgs: "275", bonus: "+250" },
+                { pkg: "Power",    usdc: "50 $GB", credits: "6,000", msgs: "600", bonus: "+1,000" },
               ].map((row) => (
                 <tr key={row.pkg} className="border-b border-border/50">
                   <td className="px-4 py-3 text-xs font-medium text-foreground">{row.pkg}</td>
@@ -357,7 +356,7 @@ const sections: Section[] = [
           </table>
         </div>
         <P>
-          Payments are on-chain USDC transfers on Solana mainnet. No credit card support yet.
+          Payments are on-chain $GB token transfers on Solana mainnet. No credit card support yet.
           Credits never expire.
         </P>
       </>
@@ -371,7 +370,7 @@ const sections: Section[] = [
         <P>
           Workers keep <strong className="text-foreground">75% of the value of every job they
           complete.</strong> 85% once staking launches. Earnings accrue as Honey, displayed in USD,
-          paid in USDC.
+          paid in $GB.
         </P>
 
         <H2>How the earning flow works</H2>
@@ -405,7 +404,7 @@ const sections: Section[] = [
             {
               n: "6",
               title: "Withdraw to Solana",
-              body: "Once matured, Honey moves to your available balance. Open the Earn page, enter a Solana wallet address, and submit a withdrawal request. USDC is sent to your wallet after the request is reviewed and approved.",
+              body: "Once matured, Honey moves to your available balance. Open the Earn page, enter a Solana wallet address, and submit a withdrawal request. $GB is sent to your wallet after the request is reviewed and approved.",
             },
           ].map((step) => (
             <li key={step.n} className="flex items-start gap-4 p-4 rounded-xl border border-border bg-card/50">
@@ -506,7 +505,7 @@ rate = 85%  (staked, Phase 2)`}</Code>
         <div className="border border-border rounded-xl p-5 my-4 space-y-3">
           {[
             { label: "Maturity window", value: "24 hours, integrity checks run before Honey is spendable" },
-            { label: "Payout currency", value: "USDC on Solana — withdraw to any Solana wallet from the Earn page" },
+            { label: "Payout currency", value: "$GB on Solana — withdraw to any Solana wallet from the Earn page" },
             { label: "Failed canary / mirror check", value: "Job earnings forfeited, reputation penalty applied" },
           ].map((row) => (
             <div key={row.label} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-sm">
@@ -518,9 +517,9 @@ rate = 85%  (staked, Phase 2)`}</Code>
 
         <H2>Where does worker pay come from?</H2>
         <P>
-          Every credit purchase is a real USDC transfer on Solana mainnet, verified on-chain before
-          credits are issued. That USDC pools in the Gigabee treasury wallet. Worker Honey is your
-          allocated share of that pool, tracked in USD, paid out as USDC when you withdraw.
+          Every credit purchase is a real $GB token transfer on Solana mainnet, verified on-chain before
+          credits are issued. That $GB pools in the Gigabee treasury wallet. Worker Honey is your
+          allocated share of that pool, tracked in USD, paid out as $GB when you withdraw.
         </P>
 
         <div className="space-y-0 my-4 rounded-xl border border-border overflow-hidden">
@@ -528,8 +527,8 @@ rate = 85%  (staked, Phase 2)`}</Code>
             {
               step: "1",
               label: "User pays",
-              detail: "User sends USDC to the treasury wallet on Solana mainnet. Payment is verified on-chain. Credits are issued to the user's account.",
-              tag: "In: USDC",
+              detail: "User sends $GB to the treasury wallet on Solana mainnet. Payment is verified on-chain. Credits are issued to the user's account.",
+              tag: "In: $GB",
               tagColor: "text-primary",
             },
             {
@@ -542,15 +541,15 @@ rate = 85%  (staked, Phase 2)`}</Code>
             {
               step: "3",
               label: "24-hour hold",
-              detail: "Honey stays pending while integrity checks complete. No USDC moves during this window, only the database record matures from pending to available.",
+              detail: "Honey stays pending while integrity checks complete. No $GB moves during this window, only the database record matures from pending to available.",
               tag: "Hold: DB only",
               tagColor: "text-muted-foreground",
             },
             {
               step: "4",
               label: "You withdraw",
-              detail: "The network sends USDC from the treasury wallet to your Solana wallet, exactly equal to your available Honey balance. No token conversion, pure USDC.",
-              tag: "Out: USDC",
+              detail: "The network sends $GB from the treasury wallet to your Solana wallet, exactly equal to your available Honey balance. No token conversion, pure $GB.",
+              tag: "Out: $GB",
               tagColor: "text-primary",
             },
           ].map((row, i, arr) => (
@@ -572,14 +571,14 @@ rate = 85%  (staked, Phase 2)`}</Code>
         <P>
           The platform keeps 25% of each job's credit value to cover operating costs, OpenRouter
           inference fees (while the native worker network is being built out), and development.
-          There are no hidden fees and no token involved, USDC in, USDC out.
+          There are no hidden fees. $GB in, $GB out.
         </P>
 
         <Callout title="What backs your Honey?">
-          Each unit of Honey is 1 micro-dollar of real USDC already received by the treasury.
-          The treasury is a real Solana wallet. Honey is not a token, it is an IOU against USDC
-          the network has already collected. No conversion or exchange is required — the USDC is
-          already in the treasury wallet when you request a withdrawal.
+          Each unit of Honey is backed by $GB already received by the treasury wallet on Solana.
+          Honey is not a separate token — it is an IOU against $GB the network has already
+          collected. No conversion required: the $GB is already in the treasury when you withdraw.
+          <br /><em className="text-xs opacity-70">(Updated: previously USDC, now $GB token — CA: 7NcMKMrXPBVCWPcs9SSqnF6ZGy5neAtzTZpFqZqLquaP)</em>
         </Callout>
 
         <H2>Native quickstart</H2>
@@ -695,7 +694,7 @@ node gigabee-worker.mjs`}</Code>
             "Click Withdraw in the Honey earnings panel.",
             "Enter a valid Solana wallet address (Phantom, Solflare, or any SPL-compatible wallet).",
             "Confirm the amount and submit the request.",
-            "USDC is sent on-chain after the payout is reviewed and approved (typically within 24 hours).",
+            "$GB is sent on-chain after the payout is reviewed and approved (typically within 24 hours).",
           ].map((step, i) => (
             <li key={i} className="flex items-start gap-2">
               <span className="text-primary mt-0.5 shrink-0 font-mono text-xs">{i + 1}.</span>
@@ -704,7 +703,7 @@ node gigabee-worker.mjs`}</Code>
           ))}
         </ol>
         <Callout title="Minimum withdrawal">
-          The minimum withdrawal amount is $1.00 USD. Withdrawals below this threshold are
+          The minimum withdrawal amount is $25.00 in $GB. Withdrawals below this threshold are
           queued until your available balance reaches the minimum.
         </Callout>
       </>
@@ -716,7 +715,7 @@ node gigabee-worker.mjs`}</Code>
     content: (
       <>
         <P>
-          Run a Gigabee worker on any machine with a GPU and earn Honey (USDC) for every inference
+          Run a Gigabee worker on any machine with a GPU and earn Honey ($GB) for every inference
           job you complete. Works on Windows, macOS, and Linux — desktop, laptop, or server.
         </P>
 
@@ -1123,7 +1122,7 @@ pm2 logs gigabee-worker`}</Code>
           <div className="p-4 rounded-xl border border-border bg-card">
             <p className="text-sm font-medium text-foreground mb-1">GPU workers</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Serve inference jobs. Earn 75% of every job's credit value as Honey, paid in USDC on
+              Serve inference jobs. Earn 75% of every job's credit value as Honey, paid in $GB on
               Solana. Requires a dedicated GPU (4 GB+ VRAM).
             </p>
           </div>
@@ -1458,12 +1457,12 @@ console.log(text);`}</Code>
           "Bee Hover & Glide chat — routes to native Ollama GPU workers when online, falls back to OpenRouter free models",
           "Phantom & Solflare wallet login (no password, no email, no KYC)",
           "Credits system: 1 credit = $0.01, 10 free on signup",
-          "USDC credit top-up via Phantom/Solflare (Solana mainnet, verified on-chain before credits are issued)",
+          "$GB credit top-up via Phantom/Solflare (Solana mainnet, verified on-chain before credits are issued)",
           "Native GPU worker script (Node.js + Ollama) — connect your GPU, jobs route to you when you're online",
           "Real-time worker monitor panel on /earn — shows live online/offline status, polling every 5 seconds",
           "Earnings recorded to database per job — pending balance and history visible on /earn",
           "Earnings scheduler — pending Honey automatically matures to available status after 24 hours",
-          "USDC Honey withdrawals to any Solana wallet — submit a withdrawal request from /earn",
+          "$GB Honey withdrawals to any Solana wallet — submit a withdrawal request from /earn",
           "Referral program: share your link, earn 5% of what referrals spend for 12 months",
           "Public OpenAI-compatible API (GET /api/v1/models, POST /api/v1/chat/completions) with SSE streaming",
           "API key management: create/revoke giga_ keys from Earn → API Keys, authenticate any OpenAI SDK client",
@@ -1574,7 +1573,7 @@ console.log(text);`}</Code>
               {
                 title: "New: Browser GPU workers (WebGPU, no install)",
                 detail:
-                  "WebGPU browser workers are live. Open /earn → Browser Worker tab in Chrome or Edge, click Start Worker, and keep the tab open. Your GPU serves inference jobs from the browser and earns Honey (USDC) per job — the same 75% revenue share as native Ollama workers. No installation, no CLI, no GPU driver setup required beyond a WebGPU-capable browser.",
+                  "WebGPU browser workers are live. Open /earn → Browser Worker tab in Chrome or Edge, click Start Worker, and keep the tab open. Your GPU serves inference jobs from the browser and earns Honey ($GB) per job — the same 75% revenue share as native Ollama workers. No installation, no CLI, no GPU driver setup required beyond a WebGPU-capable browser.",
               },
             ],
           },
@@ -1633,7 +1632,7 @@ console.log(text);`}</Code>
               {
                 title: "Credit top-up via Solana on-chain verification",
                 detail:
-                  "Users can top up credits by sending USDC on Solana mainnet. The server watches for the transaction, verifies it on-chain, and issues credits atomically. 1 credit = $0.01.",
+                  "Users can top up credits by sending $GB on Solana mainnet. The server watches for the transaction, verifies it on-chain, and issues credits atomically. 1 credit = $0.01.",
               },
               {
                 title: "Token streaming from native workers",

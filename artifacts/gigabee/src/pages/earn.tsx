@@ -138,9 +138,12 @@ export default function Earn() {
     }
   }
 
+  const MIN_WITHDRAWAL_USD = 25;
+
   async function handleWithdraw() {
     const amount = parseFloat(withdrawAmount);
     if (!amount || !withdrawWallet) return;
+    if (amount < MIN_WITHDRAWAL_USD) return;
     try {
       await withdrawMutation.mutateAsync({ data: { amountUsd: amount, walletAddress: withdrawWallet } });
       queryClient.invalidateQueries({ queryKey: getGetEarningsBalanceQueryKey() });
@@ -218,7 +221,7 @@ export default function Earn() {
           <div className="flex flex-wrap items-start justify-between gap-3 mb-6 sm:mb-8">
             <div>
               <h1 className="text-xl sm:text-2xl font-medium text-foreground mb-1">Earn Honey</h1>
-              <p className="text-sm text-muted-foreground">Share compute, earn real USD paid in USDC.</p>
+              <p className="text-sm text-muted-foreground">Share compute, earn Honey paid in $GB.</p>
             </div>
             <Dialog open={withdrawOpen} onOpenChange={setWithdrawOpen}>
               <DialogTrigger asChild>
@@ -232,12 +235,18 @@ export default function Earn() {
                   <DialogTitle>Withdraw Honey</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4 pt-2">
-                  <div className="p-3 rounded-xl bg-secondary text-sm text-muted-foreground">
-                    Available: <span className="font-mono text-primary font-medium">
+                  <div className="p-3 rounded-xl bg-secondary text-sm text-muted-foreground space-y-1">
+                    <div>Available: <span className="font-mono text-primary font-medium">
                       ${balance?.honeyUsd.toFixed(4) ?? "0.0000"}
-                    </span>
-                    {" "}· First withdrawal has a 24h review hold.
+                    </span></div>
+                    <div>Minimum withdrawal: <span className="font-mono text-foreground font-medium">$25.00</span> in $GB</div>
+                    <div>First withdrawal has a 24h review hold.</div>
                   </div>
+                  {(balance?.honeyUsd ?? 0) < MIN_WITHDRAWAL_USD && (
+                    <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-600 dark:text-amber-400">
+                      Your available balance is below the $25.00 minimum. Keep earning and come back when you've accumulated enough Honey.
+                    </div>
+                  )}
                   <div className="space-y-1.5">
                     <Label>Amount (USD)</Label>
                     <Input
@@ -245,11 +254,15 @@ export default function Earn() {
                       value={withdrawAmount}
                       onChange={e => setWithdrawAmount(e.target.value)}
                       placeholder="0.00"
+                      min={MIN_WITHDRAWAL_USD}
                       data-testid="input-withdraw-amount"
                     />
+                    {withdrawAmount && parseFloat(withdrawAmount) < MIN_WITHDRAWAL_USD && (
+                      <p className="text-xs text-destructive">Minimum withdrawal is $25.00</p>
+                    )}
                   </div>
                   <div className="space-y-1.5">
-                    <Label>Solana wallet address (USDC)</Label>
+                    <Label>Solana wallet address ($GB)</Label>
                     <Input
                       value={withdrawWallet}
                       onChange={e => setWithdrawWallet(e.target.value)}
@@ -260,7 +273,13 @@ export default function Earn() {
                   <Button
                     className="w-full"
                     onClick={handleWithdraw}
-                    disabled={withdrawMutation.isPending || !withdrawAmount || !withdrawWallet}
+                    disabled={
+                      withdrawMutation.isPending ||
+                      !withdrawAmount ||
+                      !withdrawWallet ||
+                      parseFloat(withdrawAmount || "0") < MIN_WITHDRAWAL_USD ||
+                      (balance?.honeyUsd ?? 0) < MIN_WITHDRAWAL_USD
+                    }
                     data-testid="btn-confirm-withdraw"
                   >
                     {withdrawMutation.isPending ? "Processing..." : "Request withdrawal"}
@@ -320,7 +339,7 @@ export default function Earn() {
                       "Serve inference jobs for users",
                       "Earn 75% of each job's credit value",
                       "Honey matures after 24h integrity check",
-                      "Withdraw as USDC to Solana wallet",
+                      "Withdraw as $GB to Solana wallet",
                     ].map((step, i) => (
                       <div key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
                         <span className="w-4 h-4 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary text-[10px] font-medium shrink-0 mt-0.5">
@@ -372,7 +391,7 @@ export default function Earn() {
                     ))}
                   </div>
                   <div className="pt-2 border-t border-border space-y-1.5">
-                    <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-wide mb-1">Formula: USDC paid × 5%</p>
+                    <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-wide mb-1">Formula: $GB paid × 5%</p>
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground font-mono">$5 Starter pack</span>
                       <span className="font-mono text-primary font-medium">= $0.25 Honey</span>

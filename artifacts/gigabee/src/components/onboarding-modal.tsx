@@ -61,8 +61,8 @@ export function OnboardingModal() {
             <ol className="space-y-3 mb-8">
               {[
                 "Type a prompt and pick Bee Hover or Bee Glide. Your free credits work on every model.",
-                "When they run out, top up with USDC on Solana. Credits never expire.",
-                "Got a GPU? Earn Honey (USDC) by serving inference jobs for the network.",
+                "When they run out, top up with $GB on Solana. Credits never expire.",
+                "Got a GPU? Earn Honey ($GB) by serving inference jobs for the network.",
               ].map((text, i) => (
                 <li key={i} className="flex gap-3 text-sm text-muted-foreground">
                   <span className="flex-shrink-0 flex items-center justify-center h-5 w-5 rounded-full bg-primary/15 text-primary text-xs font-semibold mt-0.5">
@@ -116,7 +116,7 @@ export function OnboardingModal() {
                   <div>
                     <p className="text-sm font-medium text-foreground mb-0.5">Earn Honey</p>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      Share your GPU and get paid in USDC on Solana.
+                      Share your GPU and get paid in $GB on Solana.
                     </p>
                   </div>
                 </div>

@@ -414,7 +414,7 @@ function PayoutsTab({ token, overview }: { token: string; overview: Overview | n
                   </div>
                   <div>
                     <p className="text-sm font-mono font-semibold text-foreground">{fmt(p.amountUsd)}</p>
-                    <p className="text-xs text-muted-foreground">USDC</p>
+                    <p className="text-xs text-muted-foreground">$GB</p>
                   </div>
                   <div><StatusBadge status={p.status} /></div>
                   <div className="w-32 flex gap-2 justify-end">
@@ -445,11 +445,11 @@ function PayoutsTab({ token, overview }: { token: string; overview: Overview | n
                 {confirming === p.id && (
                   <div className="px-5 py-3 bg-green-500/5 border-b border-green-500/20 flex items-center gap-4">
                     <div className="flex-1">
-                      <p className="text-xs font-medium text-foreground">Send {fmt(p.amountUsd)} USDC to {truncate(p.walletAddress)}?</p>
+                      <p className="text-xs font-medium text-foreground">Send {fmt(p.amountUsd)} in $GB to {truncate(p.walletAddress)}?</p>
                       <p className="text-xs text-muted-foreground mt-0.5">Treasury wallet will sign and broadcast automatically.</p>
                     </div>
                     <Button size="sm" className="h-7 text-xs bg-green-600 hover:bg-green-700 text-white shrink-0" disabled={isSending} onClick={() => doApprove(p.id)}>
-                      {isSending ? "Sending..." : "Send USDC"}
+                      {isSending ? "Sending..." : "Send $GB"}
                     </Button>
                     <Button size="sm" variant="ghost" className="h-7 text-xs shrink-0" disabled={isSending} onClick={() => setConfirming(null)}>Cancel</Button>
                   </div>
